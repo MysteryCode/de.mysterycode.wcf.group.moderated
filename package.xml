@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package name="de.mysterycode.wcf.group.moderated" xmlns="http://www.woltlab.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.woltlab.com http://www.woltlab.com/XSD/2019/package.xsd">
+	<packageinformation>
+		<packagename>Moderates Groups</packagename>
+		<packagename language="de">Moderierte Benutzergruppen</packagename>
+		<packagedescription>Extends the user group feature of the WoltLab Suite Core by moderated user groups.</packagedescription>
+		<packagedescription language="de"><![CDATA[Erweitert das Benutzergruppen-System des WoltLab Suite Core um moderierte Benutzergruppen.]]></packagedescription>
+		
+		<version>1.0.0 Beta 1</version>
+		<date>2020-12-13</date>
+	</packageinformation>
+	
+	<authorinformation>
+		<author>Florian Gail</author>
+		<authorurl>https://www.mysterycode.de</authorurl>
+	</authorinformation>
+	
+	<requiredpackages>
+		<requiredpackage minversion="5.3.0">com.woltlab.wcf</requiredpackage>
+	</requiredpackages>
+	
+	<excludedpackages>
+		<excludedpackage version="5.4.0 Alpha 1">com.woltlab.wcf</excludedpackage>
+	</excludedpackages>
+	
+	<instructions type="install">
+		<instruction type="sql" />
+		
+		<instruction type="option" />
+		<instruction type="file" />
+		<instruction type="eventListener" />
+		<instruction type="objectType" />
+		
+		<instruction type="script">acp/install_de.mysterycode.wcf.raction.extension.php</instruction>
+		
+		<instruction type="language" />
+	</instructions>
+</package>
