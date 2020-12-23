@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<data xmlns="http://www.woltlab.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.woltlab.com https://www.woltlab.com/XSD/2019/templateListener.xsd">
+	<import>
+		<templatelistener name="groupAddSettings">
+			<environment>admin</environment>
+			<templatename>userGroupAdd</templatename>
+			<eventname>sections</eventname>
+			<templatecode>{if $templateNameApplication == 'wcf'}{include file='__userGroupAddModeratedGroup'}{/if}</templatecode>
+		</templatelistener>
+	</import>
+</data>

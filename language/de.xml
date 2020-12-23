@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<language xmlns="http://www.woltlab.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.woltlab.com http://www.woltlab.com/XSD/2019/language.xsd" languagecode="de">
+	<category name="wcf.acp.group">
+		<item name="wcf.acp.group.mmoderatedGroup"><![CDATA[Gruppen-Typ]]></item>
+		
+		<item name="wcf.acp.group.mmoderated.type"><![CDATA[Typ der Benutzergruppe]]></item>
+		<item name="wcf.acp.group.mmoderated.type.closed"><![CDATA[Geschlossene Benutzergruppe]]></item>
+		<item name="wcf.acp.group.mmoderated.type.closedmoderated"><![CDATA[Geschlossene, moderierte Benutzergruppe]]></item>
+		<item name="wcf.acp.group.mmoderated.type.moderated"><![CDATA[Moderierte Benutzergruppe]]></item>
+		<item name="wcf.acp.group.mmoderated.type.open"><![CDATA[Offene Benutzergruppe]]></item>
+		<item name="wcf.acp.group.mmoderated.type.description"><![CDATA[Select the user group type:
+<ul class="nativeList">
+	<li>Closed: Only administrators can add members.</li>
+	<li>Free for All: Every user can join or leave at any time.</li>
+	<li>Moderated: Users must apply but can leave at any time.</li>
+	<li>Closed Moderated: Users must apply but cannot leave by themselves.</li>
+</ul>]]></item>
+		
+		<item name="wcf.acp.group.mmoderated.manager"><![CDATA[Gruppenleitung]]></item>
+		<item name="wcf.acp.group.mmoderated.manager.description"><![CDATA[Gruppenleiter können Beitrittsgesuche verwalten und Benutzer zur Gruppe hinzufügen. Mehrere Benutzernamen per Komma trennen.]]></item>
+		<item name="wcf.acp.group.mmoderated.manager.error.empty"><![CDATA[Moderierte und geschlossene Gruppen erfordern mindestens eine Gruppenleitung.]]></item>
+	</category>
+</language>
