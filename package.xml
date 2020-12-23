@@ -31,7 +31,7 @@
 		<instruction type="eventListener" />
 		<instruction type="objectType" />
 		
-		<instruction type="script">acp/install_de.mysterycode.wcf.raction.extension.php</instruction>
+		<instruction type="script">acp/install_de.mysterycode.wcf.group.moderated.php</instruction>
 		
 		<instruction type="language" />
 	</instructions>
