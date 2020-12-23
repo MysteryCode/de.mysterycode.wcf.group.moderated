@@ -7,23 +7,23 @@ class MModeratedUserGroup extends UserGroup {
 	 * Type for closed groups.
 	 * @var integer
 	 */
-	const CLOSED = 1;
+	const CLOSED = 4;
 	
 	/**
 	 * Type for moderated groups.
 	 * @var integer
 	 */
-	const MODERATED = 2;
+	const MODERATED = 6;
 	
 	/**
 	 * Type for closed and moderated groups.
 	 * @var integer
 	 */
-	const CLOSEDMODERATED = 3;
+	const CLOSEDMODERATED = 7;
 	
 	/**
 	 * Type for open groups.
 	 * @var integer
 	 */
-	const OPEN = 4;
+	const OPEN = 5;
 }

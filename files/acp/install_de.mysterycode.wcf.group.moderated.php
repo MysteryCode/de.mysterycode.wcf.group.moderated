@@ -81,17 +81,6 @@ $tables = [
 				->referencedTable('wcf1_user_group')
 				->referencedColumns(['groupID'])
 				->onDelete('CASCADE'),
-		]),
-	PartialDatabaseTable::create('wcf1_user_group')
-		->columns([
-			EnumDatabaseTableColumn::create('type')
-				->enumValues([
-					MModeratedUserGroup::OPEN,
-					MModeratedUserGroup::MODERATED,
-					MModeratedUserGroup::CLOSED,
-					MModeratedUserGroup::CLOSEDMODERATED
-				])
-				->defaultValue(MModeratedUserGroup::OPEN)
 		])
 ];
 
