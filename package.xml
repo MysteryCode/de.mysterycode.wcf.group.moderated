@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <package name="de.mysterycode.wcf.group.moderated" xmlns="http://www.woltlab.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.woltlab.com http://www.woltlab.com/XSD/2019/package.xsd">
 	<packageinformation>
-		<packagename>Moderates Groups</packagename>
+		<packagename>Moderated Groups</packagename>
 		<packagename language="de">Moderierte Benutzergruppen</packagename>
 		<packagedescription>Extends the user group feature of the WoltLab Suite Core by moderated user groups.</packagedescription>
 		<packagedescription language="de"><![CDATA[Erweitert das Benutzergruppen-System des WoltLab Suite Core um moderierte Benutzergruppen.]]></packagedescription>
