@@ -8,6 +8,7 @@ use wcf\data\user\group\request\UserGroupRequest;
 use wcf\data\user\group\request\UserGroupRequestAction;
 use wcf\data\user\group\UserGroup;
 use wcf\system\cache\builder\UserGroupManagerCacheBuilder;
+use wcf\system\cache\runtime\UserProfileRuntimeCache;
 use wcf\system\comment\CommentHandler;
 use wcf\system\comment\manager\ICommentManager;
 use wcf\system\exception\IllegalLinkException;
@@ -135,6 +136,10 @@ class GroupRequestEditForm extends AbstractFormBuilderForm {
 			FormContainer::create('requestData')
 				->label('wcf.acp.group.mmoderated.request.requestData')
 				->appendChildren([
+					TextDisplayFormField::create('username')
+						->label('wcf.acp.group.mmoderated.request.user')
+						->text(WCF::getTPL()->fetchString(WCF::getTPL()->getCompiler()->compileString('username', '{user object=$user}', [], true)['template'], ['user' => UserProfileRuntimeCache::getInstance()->getObject($this->formObject->userID)]))
+						->supportHTML(),
 					TextDisplayFormField::create('message')
 						->label('wcf.acp.group.mmoderated.request.message')
 						->text($this->formObject->getFormattedMessage())
