@@ -17,6 +17,7 @@
 	
 	<requiredpackages>
 		<requiredpackage minversion="5.3.0">com.woltlab.wcf</requiredpackage>
+		<requiredpackage minversion="1.0.0 Alpha 1">de.mysterycode.wcf.formbuilder.extension</requiredpackage>
 	</requiredpackages>
 	
 	<excludedpackages>
@@ -24,12 +25,15 @@
 	</excludedpackages>
 	
 	<instructions type="install">
-		<instruction type="sql" />
-		
-		<instruction type="option" />
+		<instruction type="acpTemplate" />
+		<instruction type="template" />
 		<instruction type="file" />
-		<instruction type="eventListener" />
+		
 		<instruction type="objectType" />
+		<instruction type="eventListener" />
+		<instruction type="templateListener" />
+		<instruction type="page" />
+		<instruction type="userMenu" />
 		
 		<instruction type="script">acp/install_de.mysterycode.wcf.group.moderated.php</instruction>
 		
