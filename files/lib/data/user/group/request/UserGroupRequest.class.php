@@ -53,4 +53,19 @@ class UserGroupRequest extends DatabaseObject {
 		
 		return $processor->getHtml();
 	}
+	
+	/**
+	 * Returns the formatted reply
+	 *
+	 * @return string
+	 */
+	public function getFormattedReply() {
+		MessageEmbeddedObjectManager::getInstance()->loadObjects('de.mysterycode.wcf.group.moderated.request.reply', [$this->getObjectID()]);
+		
+		$processor = new HtmlOutputProcessor();
+		$processor->enableUgc = false;
+		$processor->process($this->reply, 'de.mysterycode.wcf.group.moderated.request.reply', $this->getObjectID(), false);
+		
+		return $processor->getHtml();
+	}
 }
