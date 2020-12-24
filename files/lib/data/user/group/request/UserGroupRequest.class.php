@@ -6,6 +6,7 @@ use wcf\data\DatabaseObject;
 use wcf\data\user\UserProfile;
 use wcf\system\cache\runtime\UserProfileRuntimeCache;
 use wcf\system\html\output\HtmlOutputProcessor;
+use wcf\system\message\embedded\object\MessageEmbeddedObjectManager;
 
 /**
  * @property-read	integer	$requestID
@@ -44,9 +45,11 @@ class UserGroupRequest extends DatabaseObject {
 	 * @return string
 	 */
 	public function getFormattedMessage() {
+		MessageEmbeddedObjectManager::getInstance()->loadObjects('de.mysterycode.wcf.group.moderated.request.message', [$this->getObjectID()]);
+		
 		$processor = new HtmlOutputProcessor();
 		$processor->enableUgc = false;
-		$processor->process($this->message, 'de.mysterycode.wcf.group.moderated.request.reply', $this->getObjectID(), false);
+		$processor->process($this->message, 'de.mysterycode.wcf.group.moderated.request.message', $this->getObjectID(), false);
 		
 		return $processor->getHtml();
 	}
