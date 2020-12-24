@@ -2,6 +2,7 @@
 
 namespace wcf\data\user\group;
 
+use wcf\system\user\storage\UserStorageHandler;
 use wcf\system\WCF;
 
 class MModeratedUserGroupAction extends UserGroupAction {
@@ -16,11 +17,15 @@ class MModeratedUserGroupAction extends UserGroupAction {
 		
 		if (!empty($userIDs)) {
 			// TODO compatibility
-			$insert = WCF::getDB()->prepareStatement("INSERT INTO wcf" . WCF_N . "_user_group_manager (userID, groupID), VALUES (?, ?)");
+			$insert = WCF::getDB()->prepareStatement("INSERT INTO wcf" . WCF_N . "_user_group_manager (userID, groupID) VALUES (?, ?)");
 			WCF::getDB()->beginTransaction();
 			foreach ($userIDs as $userID) $insert->execute([$userID, $group->groupID]);
 			WCF::getDB()->commitTransaction();
 		}
+		
+		UserStorageHandler::getInstance()->resetAll('isGroupManager');
+		
+		UserGroupEditor::resetCache();
 	}
 	
 	public function addLeaders() {
@@ -29,9 +34,37 @@ class MModeratedUserGroupAction extends UserGroupAction {
 		$userIDs = $this->parameters['userIDs'];
 		
 		// TODO compatibility
-		$insert = WCF::getDB()->prepareStatement("INSERT IGNORE INTO wcf" . WCF_N . "_user_group_manager (userID, groupID), VALUES (?, ?)");
+		$insert = WCF::getDB()->prepareStatement("INSERT IGNORE INTO wcf" . WCF_N . "_user_group_manager (userID, groupID) VALUES (?, ?)");
 		WCF::getDB()->beginTransaction();
 		foreach ($userIDs as $userID) $insert->execute([$userID, $group->groupID]);
 		WCF::getDB()->commitTransaction();
+		
+		UserStorageHandler::getInstance()->resetAll('isGroupManager');
+		
+		UserGroupEditor::resetCache();
+	}
+	
+	public function validateJoin() {
+		$this->getSingleObject();
+	}
+	
+	public function join() {
+	
+	}
+	
+	public function validateLeave() {
+		$this->getSingleObject();
+	}
+	
+	public function leave() {
+	
+	}
+	
+	public function validateCancel() {
+		$this->getSingleObject();
+	}
+	
+	public function cancel() {
+	
 	}
 }

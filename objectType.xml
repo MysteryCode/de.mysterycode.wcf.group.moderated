@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<data xmlns="http://www.woltlab.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.woltlab.com https://www.woltlab.com/XSD/2019/objectType.xsd">
+	<import>
+		<type>
+			<name>de.mysterycode.wcf.group.moderated.request.message</name>
+			<definitionname>com.woltlab.wcf.message</definitionname>
+		</type>
+		<type>
+			<name>de.mysterycode.wcf.group.moderated.request.reply</name>
+			<definitionname>com.woltlab.wcf.message</definitionname>
+		</type>
+		
+		<type>
+			<name>de.mysterycode.wcf.group.moderated.request</name>
+			<definitionname>com.woltlab.wcf.comment.commentableContent</definitionname>
+			<classname>wcf\system\comment\manager\UserGroupRequestCommentManager</classname>
+		</type>
+	</import>
+</data>

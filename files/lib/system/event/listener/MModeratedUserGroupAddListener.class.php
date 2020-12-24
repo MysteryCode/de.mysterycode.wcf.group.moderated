@@ -60,16 +60,22 @@ class MModeratedUserGroupAddListener implements IParameterizedEventListener {
 				$this->managerProfiles = UserProfile::getUserProfilesByUsername($this->managers);
 			}
 		} else if ($eventName == 'readData' && $this->available) {
-			$this->types[MModeratedUserGroup::CLOSED] = 'closed';
-			$this->types[MModeratedUserGroup::MODERATED] = 'moderated';
-			$this->types[MModeratedUserGroup::OPEN] = 'open';
+			$this->types = [
+				MModeratedUserGroup::CLOSED => 'closed',
+				MModeratedUserGroup::MODERATED => 'moderated',
+				MModeratedUserGroup::CLOSEDMODERATED => 'closedmoderated',
+				MModeratedUserGroup::OPEN => 'open',
+			];
 			
 			if (empty($_POST) && $eventObj instanceof UserGroupEditForm) {
 				$statement = WCF::getDB()->prepareStatement("SELECT user.username FROM wcf" . WCF_N . "_user_group_manager manager, wcf" . WCF_N . "_user user WHERE user.userID = manager.userID AND manager.groupID = ?");
 				$statement->execute([$eventObj->group->groupID]);
 				$usernames = $statement->fetchList('username');
-				$this->managers = implode(', ', $usernames);
 				$this->managerProfiles = UserProfile::getUserProfilesByUsername($usernames);
+				foreach ($this->managerProfiles as $profile) {
+					$this->managers[] = $profile->getUsername();
+				}
+				$this->type = $eventObj->group->groupType;
 			}
 		} else if ($eventName == 'validate' && $this->available) {
 			if (empty($this->type)) {
@@ -79,7 +85,8 @@ class MModeratedUserGroupAddListener implements IParameterizedEventListener {
 				throw new UserInputException('manager');
 			}
 		} else if ($eventName == 'save' && $this->available) {
-			$eventObj->additionalFields['type'] = $this->type;
+			// TODO compatibility
+			$eventObj->additionalFields['groupType'] = $this->type;
 			
 			if ($eventObj instanceof UserGroupEditForm) {
 				$userIDs = [];
@@ -100,7 +107,9 @@ class MModeratedUserGroupAddListener implements IParameterizedEventListener {
 		} else if ($eventName == 'assignVariables') {
 			WCF::getTPL()->assign([
 				'moderatedGroupTypesEnabled' => $this->available,
-				'moderatedGroupTypesAvailable' => $this->types
+				'moderatedGroupTypesAvailable' => $this->types,
+				'manager' => implode(', ', $this->managers),
+				'type' => $this->type
 			]);
 		}
 	}

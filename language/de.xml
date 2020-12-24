@@ -5,9 +5,13 @@
 		
 		<item name="wcf.acp.group.mmoderated.type"><![CDATA[Typ der Benutzergruppe]]></item>
 		<item name="wcf.acp.group.mmoderated.type.closed"><![CDATA[Geschlossene Benutzergruppe]]></item>
+		<item name="wcf.acp.group.mmoderated.type.4"><![CDATA[Geschlossene Benutzergruppe]]></item>
 		<item name="wcf.acp.group.mmoderated.type.closedmoderated"><![CDATA[Geschlossene, moderierte Benutzergruppe]]></item>
+		<item name="wcf.acp.group.mmoderated.type.7"><![CDATA[Geschlossene, moderierte Benutzergruppe]]></item>
 		<item name="wcf.acp.group.mmoderated.type.moderated"><![CDATA[Moderierte Benutzergruppe]]></item>
+		<item name="wcf.acp.group.mmoderated.type.6"><![CDATA[Moderierte Benutzergruppe]]></item>
 		<item name="wcf.acp.group.mmoderated.type.open"><![CDATA[Offene Benutzergruppe]]></item>
+		<item name="wcf.acp.group.mmoderated.type.5"><![CDATA[Offene Benutzergruppe]]></item>
 		<item name="wcf.acp.group.mmoderated.type.description"><![CDATA[Select the user group type:
 <ul class="nativeList">
 	<li>Closed: Only administrators can add members.</li>
@@ -19,5 +23,35 @@
 		<item name="wcf.acp.group.mmoderated.manager"><![CDATA[Gruppenleitung]]></item>
 		<item name="wcf.acp.group.mmoderated.manager.description"><![CDATA[Gruppenleiter können Beitrittsgesuche verwalten und Benutzer zur Gruppe hinzufügen. Mehrere Benutzernamen per Komma trennen.]]></item>
 		<item name="wcf.acp.group.mmoderated.manager.error.empty"><![CDATA[Moderierte und geschlossene Gruppen erfordern mindestens eine Gruppenleitung.]]></item>
+		
+		<item name="wcf.acp.group.mmoderated.member.true"><![CDATA[Sie sind aktuell Mitglied dieser Benutzergruppe.]]></item>
+		
+		<item name="wcf.acp.group.mmoderated.apply"><![CDATA[Für diese Gruppe bewerben]]></item>
+		<item name="wcf.acp.group.mmoderated.request.edit"><![CDATA[Bewerbung bearbeiten]]></item>
+		<item name="wcf.acp.group.mmoderated.request.cancel"><![CDATA[Bewerbung zurückziehen]]></item>
+		<item name="wcf.acp.group.mmoderated.request.cancel.confirm"><![CDATA[Wollen Sie Ihre Bewerbung wirklich zurückziehen?]]></item>
+		<item name="wcf.acp.group.mmoderated.request.status"><![CDATA[Bewerbungsstatus]]></item>
+		<item name="wcf.acp.group.mmoderated.request.status.pending"><![CDATA[Unbearbeitet]]></item>
+		<item name="wcf.acp.group.mmoderated.request.status.accepted"><![CDATA[Angenommen]]></item>
+		<item name="wcf.acp.group.mmoderated.request.status.rejected"><![CDATA[Abgewiesen]]></item>
+		<item name="wcf.acp.group.mmoderated.request.requestData"><![CDATA[Informationen zur Bewerbung]]></item>
+		<item name="wcf.acp.group.mmoderated.request.groupData"><![CDATA[Informationen zur Gruppe]]></item>
+		<item name="wcf.acp.group.mmoderated.request.groupName"><![CDATA[Gruppenname]]></item>
+		<item name="wcf.acp.group.mmoderated.request.groupDescription"><![CDATA[Beschreibung der Benutzergruppe]]></item>
+		<item name="wcf.acp.group.mmoderated.request.message"><![CDATA[Begründung]]></item>
+		<item name="wcf.acp.group.mmoderated.request.reply"><![CDATA[Antwort auf die Bewerbung]]></item>
+		<item name="wcf.acp.group.mmoderated.leave"><![CDATA[Austreten]]></item>
+		<item name="wcf.acp.group.mmoderated.leave.confirm"><![CDATA[Wollen Sie wirklich aus dieser Gruppe austreten?]]></item>
+		<item name="wcf.acp.group.mmoderated.members"><![CDATA[Mitglieder]]></item>
+		<item name="wcf.acp.group.mmoderated.requests"><![CDATA[Bewerbungen]]></item>
+		<item name="wcf.acp.group.mmoderated.requests.pending"><![CDATA[{plural value=$group->openRequestCount 1='Eine unbearbeitete Bewerbung' other='# unbearbeitete Bewerbungen'}]]></item>
+		<item name="wcf.acp.group.mmoderated.request.list.group"><![CDATA[Bewerbungen für die Benutzergruppe {$group->getName()}]]></item>
+		<item name="wcf.acp.group.mmoderated.request.user"><![CDATA[Bewerber]]></item>
+		<item name="wcf.acp.group.mmoderated.request.time"><![CDATA[Bewerbungseingang]]></item>
+	</category>
+	<category name="wcf.user.menu">
+		<item name="wcf.user.menu.userGroup"><![CDATA[Gruppen]]></item>
+		<item name="wcf.user.menu.userGroup.myGroups"><![CDATA[Verfügbare Gruppen]]></item>
+		<item name="wcf.user.menu.userGroup.moderatedGroups"><![CDATA[Gruppen-Moderation]]></item>
 	</category>
 </language>

@@ -5,9 +5,13 @@
 		
 		<item name="wcf.acp.group.mmoderated.type"><![CDATA[Type of group]]></item>
 		<item name="wcf.acp.group.mmoderated.type.closed"><![CDATA[Closed group]]></item>
+		<item name="wcf.acp.group.mmoderated.type.4"><![CDATA[Closed group]]></item>
 		<item name="wcf.acp.group.mmoderated.type.closedmoderated"><![CDATA[Closed, moderated group]]></item>
+		<item name="wcf.acp.group.mmoderated.type.7"><![CDATA[Closed, moderated group]]></item>
 		<item name="wcf.acp.group.mmoderated.type.moderated"><![CDATA[Moderated group]]></item>
+		<item name="wcf.acp.group.mmoderated.type.6"><![CDATA[Moderated group]]></item>
 		<item name="wcf.acp.group.mmoderated.type.open"><![CDATA[Open group]]></item>
+		<item name="wcf.acp.group.mmoderated.type.5"><![CDATA[Open group]]></item>
 		<item name="wcf.acp.group.mmoderated.type.description"><![CDATA[Select the user group type:
 <ul class="nativeList">
 	<li>Closed: Only administrators can add members.</li>
@@ -19,5 +23,35 @@
 		<item name="wcf.acp.group.mmoderated.manager"><![CDATA[User Group Manager]]></item>
 		<item name="wcf.acp.group.mmoderated.manager.description"><![CDATA[Managers can approve applications and add users to this user group. Separate multiple users with a comma.]]></item>
 		<item name="wcf.acp.group.mmoderated.manager.error.empty"><![CDATA[Moderated and Closed user groups require at least one manager.]]></item>
+		
+		<item name="wcf.acp.group.mmoderated.member.true"><![CDATA[You're a member of this group at the moment.]]></item>
+		
+		<item name="wcf.acp.group.mmoderated.apply"><![CDATA[Apply for this group]]></item>
+		<item name="wcf.acp.group.mmoderated.request.edit"><![CDATA[Edit application]]></item>
+		<item name="wcf.acp.group.mmoderated.request.cancel"><![CDATA[Cancel application]]></item>
+		<item name="wcf.acp.group.mmoderated.request.cancel.confirm"><![CDATA[Do you really want to cancel your application for this group?]]></item>
+		<item name="wcf.acp.group.mmoderated.request.status"><![CDATA[Application-Status]]></item>
+		<item name="wcf.acp.group.mmoderated.request.status.pending"><![CDATA[pending]]></item>
+		<item name="wcf.acp.group.mmoderated.request.status.accepted"><![CDATA[accepted]]></item>
+		<item name="wcf.acp.group.mmoderated.request.status.rejected"><![CDATA[rejected]]></item>
+		<item name="wcf.acp.group.mmoderated.request.requestData"><![CDATA[Application-Information]]></item>
+		<item name="wcf.acp.group.mmoderated.request.groupData"><![CDATA[Group-Information]]></item>
+		<item name="wcf.acp.group.mmoderated.request.groupName"><![CDATA[Group-Name]]></item>
+		<item name="wcf.acp.group.mmoderated.request.groupDescription"><![CDATA[Description of the group]]></item>
+		<item name="wcf.acp.group.mmoderated.request.message"><![CDATA[Message]]></item>
+		<item name="wcf.acp.group.mmoderated.request.reply"><![CDATA[Reply on your application]]></item>
+		<item name="wcf.acp.group.mmoderated.leave"><![CDATA[Leave]]></item>
+		<item name="wcf.acp.group.mmoderated.leave.confirm"><![CDATA[Do you really want to leave this group?]]></item>
+		<item name="wcf.acp.group.mmoderated.members"><![CDATA[Members]]></item>
+		<item name="wcf.acp.group.mmoderated.requests"><![CDATA[Applications]]></item>
+		<item name="wcf.acp.group.mmoderated.requests.pending"><![CDATA[{plural value=$group->openRequestCount 1='One pending application' other='# pending applications'}]]></item>
+		<item name="wcf.acp.group.mmoderated.request.list.group"><![CDATA[Applications for group {$group->getName()}]]></item>
+		<item name="wcf.acp.group.mmoderated.request.user"><![CDATA[Applicant]]></item>
+		<item name="wcf.acp.group.mmoderated.request.time"><![CDATA[Application-Date]]></item>
+	</category>
+	<category name="wcf.user.menu">
+		<item name="wcf.user.menu.userGroup"><![CDATA[Groups]]></item>
+		<item name="wcf.user.menu.userGroup.myGroups"><![CDATA[Available Groups]]></item>
+		<item name="wcf.user.menu.userGroup.moderatedGroups"><![CDATA[Group-Moderation]]></item>
 	</category>
 </language>

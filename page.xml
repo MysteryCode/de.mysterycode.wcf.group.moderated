@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<data xmlns="http://www.woltlab.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.woltlab.com https://www.woltlab.com/XSD/2019/page.xsd">
+	<import>
+		<page identifier="de.mysterycode.wcf.MyGroups">
+			<controller>wcf\page\MyGroupsPage</controller>
+			<name language="de">Verfügbare Benutzergruppen</name>
+			<name language="en">Available groups</name>
+			<pageType>system</pageType>
+			
+			<content language="de">
+				<title>Verfügbare Benutzergruppen</title>
+			</content>
+			<content language="en">
+				<title>Available groups</title>
+			</content>
+		</page>
+		<page identifier="de.mysterycode.wcf.GroupRequest">
+			<controller>wcf\form\GroupRequestForm</controller>
+			<name language="de">Benutzergruppenbewerbung</name>
+			<name language="en">Group-Application</name>
+			<pageType>system</pageType>
+			<parent>de.mysterycode.wcf.MyGroups</parent>
+			
+			<content language="de">
+				<title>Benutzergruppenbewerbung</title>
+			</content>
+			<content language="en">
+				<title>Group-Application</title>
+			</content>
+		</page>
+		
+		<page identifier="de.mysterycode.wcf.ModeratedGroups">
+			<controller>wcf\page\ModeratedGroupsPage</controller>
+			<name language="de">Gruppen-Moderation</name>
+			<name language="en">Group-Moderation</name>
+			<pageType>system</pageType>
+			
+			<content language="de">
+				<title>Gruppen-Moderation</title>
+			</content>
+			<content language="en">
+				<title>Group-Moderation</title>
+			</content>
+		</page>
+		<page identifier="de.mysterycode.wcf.GroupRequestList">
+			<controller>wcf\page\GroupRequestListPage</controller>
+			<name language="de">Gruppen-Bewerbungen</name>
+			<name language="en">Group-Applications</name>
+			<pageType>system</pageType>
+			<parent>de.mysterycode.wcf.ModeratedGroups</parent>
+			
+			<content language="de">
+				<title>Gruppen-Bewerbungen</title>
+			</content>
+			<content language="en">
+				<title>Group-Applications</title>
+			</content>
+		</page>
+		<page identifier="de.mysterycode.wcf.GroupRequestEdit">
+			<controller>wcf\form\GroupRequestEditForm</controller>
+			<name language="de">Benutzergruppenbewerbung bearbeiten</name>
+			<name language="en">Edit Group-Application</name>
+			<pageType>system</pageType>
+			<parent>de.mysterycode.wcf.GroupRequestList</parent>
+			<requireObjectID>1</requireObjectID>
+			
+			<content language="de">
+				<title>Benutzergruppenbewerbung bearbeiten</title>
+			</content>
+			<content language="en">
+				<title>Edit Group-Application</title>
+			</content>
+		</page>
+	</import>
+</data>

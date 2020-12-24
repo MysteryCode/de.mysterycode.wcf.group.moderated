@@ -2,10 +2,20 @@
 <data xmlns="http://www.woltlab.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.woltlab.com https://www.woltlab.com/XSD/2019/eventListener.xsd">
 	<import>
 		<eventlistener name="groupAddSettings">
-			<eventclassname><![CDATA[wcf\acp\form\\UserGroupAddForm]]></eventclassname>
+			<environment>admin</environment>
+			<eventclassname><![CDATA[wcf\acp\form\UserGroupAddForm]]></eventclassname>
 			<eventname><![CDATA[readData,readFormParameters,save,assignVariables,validate]]></eventname>
 			<listenerclassname><![CDATA[wcf\system\event\listener\MModeratedUserGroupAddListener]]></listenerclassname>
 			<inherit>1</inherit>
 		</eventlistener>
 	</import>
+	<delete>
+		<eventlistener name="groupEditSettings">
+			<environment>admin</environment>
+			<eventclassname><![CDATA[wcf\acp\form\UserGroupEditForm]]></eventclassname>
+			<eventname><![CDATA[readData,readFormParameters,save,assignVariables,validate]]></eventname>
+			<listenerclassname><![CDATA[wcf\system\event\listener\MModeratedUserGroupAddListener]]></listenerclassname>
+			<inherit>1</inherit>
+		</eventlistener>
+	</delete>
 </data>

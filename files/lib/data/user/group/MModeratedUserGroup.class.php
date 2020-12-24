@@ -2,7 +2,16 @@
 
 namespace wcf\data\user\group;
 
-class MModeratedUserGroup extends UserGroup {
+use wcf\data\DatabaseObjectDecorator;
+use wcf\system\user\storage\UserStorageHandler;
+use wcf\system\WCF;
+
+class MModeratedUserGroup extends DatabaseObjectDecorator {
+	/**
+	 * @inheritDoc
+	 */
+	protected static $baseClass = UserGroup::class;
+	
 	/**
 	 * Type for closed groups.
 	 * @var integer
@@ -26,4 +35,40 @@ class MModeratedUserGroup extends UserGroup {
 	 * @var integer
 	 */
 	const OPEN = 5;
+	
+	/**
+	 * Detects whether the given user is a manager of any group.
+	 *
+	 * @param	integer	$userID
+	 * @return	boolean
+	 */
+	public static function isGroupManager($userID = null) {
+		if ($userID === null) $userID = WCF::getUser()->userID;
+		if (!$userID) return false;
+		
+		$var = UserStorageHandler::getInstance()->getField('isGroupManager', $userID);
+		if ($var !== null) return $var;
+		
+		$result = false;
+		if ($userID === null) $userID = WCF::getUser()->userID;
+		if ($userID) {
+			$statement = WCF::getDB()->prepareStatement("SELECT groupID FROM wcf" . WCF_N . "_user_group_manager WHERE userID = ?");
+			$statement->execute([$userID]);
+			$result = $statement->fetchArray() !== false;
+		}
+		
+		UserStorageHandler::getInstance()->update($userID, 'isGroupManager', $result);
+		return $result;
+	}
+	
+	/**
+	 * Detects whether some groups are available that aren't closed (un-moderated) groups.
+	 *
+	 * @return boolean
+	 */
+	public static function specialGroupsAvailable() {
+		$groups = UserGroup::getGroupsByType([5, 6, 7]);
+		foreach ($groups as $group) if (!$group->isAdminGroup()) return true;
+		return false;
+	}
 }

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<data xmlns="http://www.woltlab.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.woltlab.com https://www.woltlab.com/XSD/2019/userMenu.xsd">
+	<import>
+		<usermenuitem name="wcf.user.menu.userGroup">
+			<iconclassname>fa-users</iconclassname>
+		</usermenuitem>
+		
+		<usermenuitem name="wcf.user.menu.userGroup.myGroups">
+			<controller><![CDATA[wcf\page\MyGroupsPage]]></controller>
+			<parent>wcf.user.menu.userGroup</parent>
+			<classname><![CDATA[\wcf\system\menu\user\MyGroupsMenuItemProvider]]></classname>
+		</usermenuitem>
+		<usermenuitem name="wcf.user.menu.userGroup.moderatedGroups">
+			<controller><![CDATA[wcf\page\ModeratedGroupsPage]]></controller>
+			<parent>wcf.user.menu.userGroup</parent>
+			<classname><![CDATA[\wcf\system\menu\user\ModeratedGroupsMenuItemProvider]]></classname>
+		</usermenuitem>
+	</import>
+</data>

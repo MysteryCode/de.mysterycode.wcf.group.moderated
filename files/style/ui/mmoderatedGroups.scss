@@ -1,0 +1,16 @@
+@include screen-md-up {
+	body[data-template="moderatedGroups"][data-application="wcf"],
+	body[data-template="myGroups"][data-application="wcf"] {
+		.groupInfoSection dl:not(.wide) {
+			display: flex;
+			flex-flow: row wrap;
+
+			dt {
+				flex: 0 0 200px;
+			}
+			dd {
+				flex: 1 1 auto;
+			}
+		}
+	}
+}

@@ -2,8 +2,10 @@
 
 use wcf\data\package\PackageCache;
 use wcf\data\user\group\MModeratedUserGroup;
+use wcf\system\database\table\column\DefaultFalseBooleanDatabaseTableColumn;
 use wcf\system\database\table\column\EnumDatabaseTableColumn;
 use wcf\system\database\table\column\IntDatabaseTableColumn;
+use wcf\system\database\table\column\NotNullInt10DatabaseTableColumn;
 use wcf\system\database\table\column\ObjectIdDatabaseTableColumn;
 use wcf\system\database\table\column\TextDatabaseTableColumn;
 use wcf\system\database\table\column\TimeDatabaseTableColumn;
@@ -22,8 +24,10 @@ $tables = [
 	DatabaseTable::create('wcf1_user_group_manager')
 		->columns([
 			ObjectIdDatabaseTableColumn::create('managerID'),
-			IntDatabaseTableColumn::create('userID'),
-			IntDatabaseTableColumn::create('groupID'),
+			IntDatabaseTableColumn::create('userID')
+				->length(10),
+			IntDatabaseTableColumn::create('groupID')
+				->length(10),
 		])
 		->indices([
 			DatabaseTableIndex::create()
@@ -45,19 +49,23 @@ $tables = [
 	DatabaseTable::create('wcf1_user_group_request')
 		->columns([
 			ObjectIdDatabaseTableColumn::create('requestID'),
-			IntDatabaseTableColumn::create('userID'),
+			IntDatabaseTableColumn::create('userID')
+				->length(10),
 			VarcharDatabaseTableColumn::create('username')
 				->defaultValue('')
 				->length(255),
-			IntDatabaseTableColumn::create('groupID'),
-			IntDatabaseTableColumn::create('comments')
+			IntDatabaseTableColumn::create('groupID')
+				->length(10),
+			NotNullInt10DatabaseTableColumn::create('comments')
 				->defaultValue(0),
-			TimeDatabaseTableColumn::create('time')
+			NotNullInt10DatabaseTableColumn::create('time')
 				->defaultValue(0),
-			TimeDatabaseTableColumn::create('changeTime')
+			NotNullInt10DatabaseTableColumn::create('changeTime')
 				->defaultValue(0),
 			TextDatabaseTableColumn::create('message'),
+			DefaultFalseBooleanDatabaseTableColumn::create('messageHasEmbeddedObjects'),
 			TextDatabaseTableColumn::create('reply'),
+			DefaultFalseBooleanDatabaseTableColumn::create('replyHasEmbeddedObjects'),
 			EnumDatabaseTableColumn::create('status')
 				->enumValues([
 					'pending',
