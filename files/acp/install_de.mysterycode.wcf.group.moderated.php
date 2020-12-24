@@ -94,9 +94,9 @@ $tables = [
 
 (new DatabaseTableChangeProcessor(
 /** @var ScriptPackageInstallationPlugin $this */
-    $this->installation->getPackage(),
-    $tables,
-    WCF::getDB()->getEditor())
+	$this->installation->getPackage(),
+	$tables,
+	WCF::getDB()->getEditor())
 )->process();
 
 if (PackageCache::getInstance()->getPackageID('com.woltlab.wcf.moderatedUserGroup')) {
