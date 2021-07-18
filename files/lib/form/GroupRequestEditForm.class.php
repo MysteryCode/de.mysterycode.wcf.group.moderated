@@ -16,8 +16,8 @@ use wcf\system\exception\PermissionDeniedException;
 use wcf\system\form\builder\container\FormContainer;
 use wcf\system\form\builder\container\wysiwyg\WysiwygFormContainer;
 use wcf\system\form\builder\data\processor\CustomFormDataProcessor;
+use wcf\system\form\builder\field\MCTextDisplayFormField;
 use wcf\system\form\builder\field\SingleSelectionFormField;
-use wcf\system\form\builder\field\TextDisplayFormField;
 use wcf\system\form\builder\IFormDocument;
 use wcf\system\menu\user\UserMenu;
 use wcf\system\request\LinkHandler;
@@ -125,10 +125,10 @@ class GroupRequestEditForm extends AbstractFormBuilderForm {
 			FormContainer::create('groupData')
 				->label('wcf.acp.group.mmoderated.request.groupData')
 				->appendChildren([
-					TextDisplayFormField::create('groupName')
+					MCTextDisplayFormField::create('groupName')
 						->label('wcf.acp.group.mmoderated.request.groupName')
 						->text($this->group->getName()),
-					TextDisplayFormField::create('groupDescription')
+					MCTextDisplayFormField::create('groupDescription')
 						->label('wcf.acp.group.mmoderated.request.groupDescription')
 						->text($this->group->getDescription())
 						->available(!empty($this->group->groupDescription))
@@ -136,11 +136,11 @@ class GroupRequestEditForm extends AbstractFormBuilderForm {
 			FormContainer::create('requestData')
 				->label('wcf.acp.group.mmoderated.request.requestData')
 				->appendChildren([
-					TextDisplayFormField::create('username')
+					MCTextDisplayFormField::create('username')
 						->label('wcf.acp.group.mmoderated.request.user')
 						->text(WCF::getTPL()->fetchString(WCF::getTPL()->getCompiler()->compileString('username', '{user object=$user}', [], true)['template'], ['user' => UserProfileRuntimeCache::getInstance()->getObject($this->formObject->userID)]))
 						->supportHTML(),
-					TextDisplayFormField::create('message')
+					MCTextDisplayFormField::create('message')
 						->label('wcf.acp.group.mmoderated.request.message')
 						->text($this->formObject->getFormattedMessage())
 						->supportHTML(),

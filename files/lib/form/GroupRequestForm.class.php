@@ -12,7 +12,7 @@ use wcf\system\exception\PermissionDeniedException;
 use wcf\system\form\builder\container\FormContainer;
 use wcf\system\form\builder\container\wysiwyg\WysiwygFormContainer;
 use wcf\system\form\builder\data\processor\CustomFormDataProcessor;
-use wcf\system\form\builder\field\TextDisplayFormField;
+use wcf\system\form\builder\field\MCTextDisplayFormField;
 use wcf\system\form\builder\IFormDocument;
 use wcf\system\menu\user\UserMenu;
 use wcf\system\request\LinkHandler;
@@ -105,14 +105,14 @@ TPL;
 			FormContainer::create('groupData')
 				->label('wcf.acp.group.mmoderated.request.groupData')
 				->appendChildren([
-					TextDisplayFormField::create('groupName')
+					MCTextDisplayFormField::create('groupName')
 						->label('wcf.acp.group.mmoderated.request.groupName')
 						->text($this->group->getName()),
-					TextDisplayFormField::create('groupDescription')
+					MCTextDisplayFormField::create('groupDescription')
 						->label('wcf.acp.group.mmoderated.request.groupDescription')
 						->text($this->group->getDescription())
 						->available(!empty($this->group->groupDescription)),
-					TextDisplayFormField::create('manager')
+					MCTextDisplayFormField::create('manager')
 						->label('wcf.acp.group.mmoderated.manager')
 						->text($managertpl ?? '')
 						->supportHTML()
