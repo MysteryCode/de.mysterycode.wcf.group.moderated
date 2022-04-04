@@ -20,9 +20,7 @@ use wcf\system\form\builder\field\MCTextDisplayFormField;
 use wcf\system\form\builder\field\SingleSelectionFormField;
 use wcf\system\form\builder\IFormDocument;
 use wcf\system\menu\user\UserMenu;
-use wcf\system\request\LinkHandler;
 use wcf\system\WCF;
-use wcf\util\HeaderUtil;
 
 /**
  * @property	UserGroupRequest	$formObject
@@ -49,27 +47,27 @@ class GroupRequestEditForm extends AbstractFormBuilderForm {
 	public $templateName = 'groupRequestEdit';
 	
 	/**
-	 * @var UserGroup
+	 * @var UserGroup|null
 	 */
-	protected $group;
+	protected ?UserGroup $group = null;
 	
 	/**
 	 * comment object type id
 	 * @var	integer
 	 */
-	public $commentObjectTypeID = 0;
+	public int $commentObjectTypeID;
 	
 	/**
 	 * comment manager object
 	 * @var	ICommentManager
 	 */
-	public $commentManager;
+	public ICommentManager $commentManager;
 	
 	/**
 	 * list of comments
 	 * @var	StructuredCommentList
 	 */
-	public $commentList;
+	public StructuredCommentList $commentList;
 	
 	/**
 	 * @inheritDoc
@@ -78,21 +76,24 @@ class GroupRequestEditForm extends AbstractFormBuilderForm {
 		parent::readParameters();
 		
 		if (isset($_REQUEST['id'])) {
-			$this->formObject = new UserGroupRequest(intval($_REQUEST['id']));
+			$this->formObject = new UserGroupRequest((int) $_REQUEST['id']);
 		}
-		if ($this->formObject === null || !$this->formObject->requestID) {
+		if ($this->formObject === null || !$this->formObject->getObjectID()) {
 			throw new IllegalLinkException();
 		}
 		
-		$this->group = new UserGroup($this->formObject->groupID);
+		$this->group = $this->formObject->getGroup();
 		$cache = UserGroupManagerCacheBuilder::getInstance()->getData();
-		if ($this->group === null || !$this->group->groupID) {
+		if ($this->group === null || !$this->group->getObjectID()) {
 			throw new IllegalLinkException();
-		} else if ($this->group->isAdminGroup()) {
+		}
+		else if ($this->group->isAdminGroup() || !$this->group->isAccessible()) {
 			throw new PermissionDeniedException();
-		} else if (!in_array($this->group->groupType, [MModeratedUserGroup::MODERATED, MModeratedUserGroup::CLOSEDMODERATED, MModeratedUserGroup::OPEN])) {
+		}
+		else if (!in_array($this->group->groupType, [MModeratedUserGroup::MODERATED, MModeratedUserGroup::CLOSEDMODERATED, MModeratedUserGroup::OPEN])) {
 			throw new PermissionDeniedException();
-		} else if (!isset($cache[$this->group->groupID]) || !in_array(WCF::getUser()->userID, $cache[$this->group->groupID])) {
+		}
+		else if (!isset($cache[$this->group->groupID]) || !\in_array(WCF::getUser()->userID, $cache[$this->group->groupID])) {
 			throw new PermissionDeniedException();
 		}
 	}
@@ -131,7 +132,7 @@ class GroupRequestEditForm extends AbstractFormBuilderForm {
 					MCTextDisplayFormField::create('groupDescription')
 						->label('wcf.acp.group.mmoderated.request.groupDescription')
 						->text($this->group->getDescription())
-						->available(!empty($this->group->groupDescription))
+						->available(!empty($this->group->groupDescription)),
 				]),
 			FormContainer::create('requestData')
 				->label('wcf.acp.group.mmoderated.request.requestData')
@@ -149,17 +150,26 @@ class GroupRequestEditForm extends AbstractFormBuilderForm {
 						->options([
 							'pending' => 'wcf.acp.group.mmoderated.request.status.pending',
 							'accepted' => 'wcf.acp.group.mmoderated.request.status.accepted',
-							'rejected' => 'wcf.acp.group.mmoderated.request.status.rejected'
-						])
+							'rejected' => 'wcf.acp.group.mmoderated.request.status.rejected',
+						]),
 				]),
-			$wysiwyg
+			$wysiwyg,
 		]);
+	}
+	
+	/**
+	 * @inheritDoc
+	 */
+	public function buildForm() {
+		parent::buildForm();
 		
-		$this->form->getDataHandler()->addProcessor(new CustomFormDataProcessor('injectData', function(IFormDocument $document, array $parameters) {
-			$parameters['data']['groupID'] = $this->group->groupID;
-			
-			return $parameters;
-		}));
+		if ($this->formAction === 'create') {
+			$this->form->getDataHandler()->addProcessor(new CustomFormDataProcessor('injectData', function(IFormDocument $document, array $parameters) {
+				$parameters['data']['groupID'] = $this->group->getObjectID();
+				
+				return $parameters;
+			}));
+		}
 	}
 	
 	/**
@@ -167,35 +177,17 @@ class GroupRequestEditForm extends AbstractFormBuilderForm {
 	 */
 	public function save() {
 		$status = $this->form->getNodeById('status')->getValue();
-		if ($status == 'accepted' && $this->formObject->status != $status) {
+		if ($status === 'accepted' && $this->formObject->status !== $status) {
 			$this->objectActionName = 'accept';
 		}
-		else if ($status == 'rejected' && $this->formObject->status != $status) {
+		else if ($status === 'rejected' && $this->formObject->status !== $status) {
 			$this->objectActionName = 'reject';
 		}
-		else if ($status == 'pending' && $this->formObject->status != $status) {
+		else if ($status === 'pending' && $this->formObject->status !== $status) {
 			$this->objectActionName = 'enqueue';
 		}
 		
 		parent::save();
-	}
-	
-	/**
-	 * @inheritDoc
-	 */
-	public function saved() {
-		parent::saved();
-		
-		if ($this->formObject === null) HeaderUtil::redirect(LinkHandler::getInstance()->getLink('MyGroups'));
-	}
-	
-	/**
-	 * @inheritDoc
-	 */
-	public function setFormAction() {
-		parent::setFormAction();
-		
-		if ($this->formObject === null) $this->form->action(LinkHandler::getInstance()->getControllerLink(static::class, ['groupID' => $this->group->groupID]));
 	}
 	
 	/**
@@ -208,7 +200,7 @@ class GroupRequestEditForm extends AbstractFormBuilderForm {
 			'commentCanAdd' => true,
 			'commentList' => $this->commentList,
 			'commentObjectTypeID' => $this->commentObjectTypeID,
-			'lastCommentTime' => $this->commentList ? $this->commentList->getMinCommentTime() : 0
+			'lastCommentTime' => $this->commentList->getMinCommentTime(),
 		]);
 	}
 	

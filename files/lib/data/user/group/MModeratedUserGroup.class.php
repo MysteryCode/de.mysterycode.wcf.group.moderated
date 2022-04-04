@@ -39,23 +39,29 @@ class MModeratedUserGroup extends DatabaseObjectDecorator {
 	/**
 	 * Detects whether the given user is a manager of any group.
 	 *
-	 * @param	integer	$userID
+	 * @param	integer|null	$userID
 	 * @return	boolean
 	 */
-	public static function isGroupManager($userID = null) {
-		if ($userID === null) $userID = WCF::getUser()->userID;
-		if (!$userID) return false;
+	public static function isGroupManager(?int $userID = null) : bool {
+		if ($userID === null) {
+			$userID = WCF::getUser()->userID;
+		}
+		if (!$userID) {
+			return false;
+		}
 		
 		$var = UserStorageHandler::getInstance()->getField('isGroupManager', $userID);
-		if ($var !== null) return $var;
-		
-		$result = false;
-		if ($userID === null) $userID = WCF::getUser()->userID;
-		if ($userID) {
-			$statement = WCF::getDB()->prepareStatement("SELECT groupID FROM wcf" . WCF_N . "_user_group_manager WHERE userID = ?");
-			$statement->execute([$userID]);
-			$result = $statement->fetchArray() !== false;
+		if ($var !== null) {
+			return (bool) $var;
 		}
+		
+		$statement = WCF::getDB()->prepare('
+			SELECT	groupID
+			FROM	wcf1_user_group_manager
+			WHERE	userID = ?
+		');
+		$statement->execute([$userID]);
+		$result = $statement->fetchArray() !== false;
 		
 		UserStorageHandler::getInstance()->update($userID, 'isGroupManager', $result);
 		return $result;
@@ -66,9 +72,14 @@ class MModeratedUserGroup extends DatabaseObjectDecorator {
 	 *
 	 * @return boolean
 	 */
-	public static function specialGroupsAvailable() {
+	public static function specialGroupsAvailable() : bool {
 		$groups = UserGroup::getGroupsByType([5, 6, 7]);
-		foreach ($groups as $group) if (!$group->isAdminGroup()) return true;
+		foreach ($groups as $group) {
+			if (!$group->isAdminGroup()) {
+				return true;
+			}
+		}
+		
 		return false;
 	}
 }

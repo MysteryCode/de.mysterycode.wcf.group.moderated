@@ -1,26 +1,17 @@
 <?php
 
-use wcf\data\package\PackageCache;
-use wcf\data\user\group\MModeratedUserGroup;
 use wcf\system\database\table\column\DefaultFalseBooleanDatabaseTableColumn;
 use wcf\system\database\table\column\EnumDatabaseTableColumn;
 use wcf\system\database\table\column\IntDatabaseTableColumn;
 use wcf\system\database\table\column\NotNullInt10DatabaseTableColumn;
 use wcf\system\database\table\column\ObjectIdDatabaseTableColumn;
 use wcf\system\database\table\column\TextDatabaseTableColumn;
-use wcf\system\database\table\column\TimeDatabaseTableColumn;
 use wcf\system\database\table\column\VarcharDatabaseTableColumn;
 use wcf\system\database\table\DatabaseTable;
-use wcf\system\database\table\DatabaseTableChangeProcessor;
 use wcf\system\database\table\index\DatabaseTableForeignKey;
 use wcf\system\database\table\index\DatabaseTableIndex;
-use wcf\system\database\table\PartialDatabaseTable;
-use wcf\system\package\plugin\ScriptPackageInstallationPlugin;
-use wcf\system\WCF;
 
-/** @var ScriptPackageInstallationPlugin $this */
-
-$tables = [
+return [
 	DatabaseTable::create('wcf1_user_group_manager')
 		->columns([
 			ObjectIdDatabaseTableColumn::create('managerID'),
@@ -70,7 +61,7 @@ $tables = [
 				->enumValues([
 					'pending',
 					'rejected',
-					'accepted'
+					'accepted',
 				])
 		])
 		->indices([
@@ -89,17 +80,5 @@ $tables = [
 				->referencedTable('wcf1_user_group')
 				->referencedColumns(['groupID'])
 				->onDelete('CASCADE'),
-		])
+		]),
 ];
-
-(new DatabaseTableChangeProcessor(
-/** @var ScriptPackageInstallationPlugin $this */
-	$this->installation->getPackage(),
-	$tables,
-	WCF::getDB()->getEditor())
-)->process();
-
-if (PackageCache::getInstance()->getPackageID('com.woltlab.wcf.moderatedUserGroup')) {
-	// TODO compatibility
-	// copy existing values
-}

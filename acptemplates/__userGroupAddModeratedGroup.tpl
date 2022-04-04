@@ -36,7 +36,7 @@
 
 		<script data-relocate="true">
 			require(['WoltLabSuite/Core/Ui/User/Search/Input'], function (UiUserSearchInput) {
-				new UiUserSearchInput(elById('manager'));
+				new UiUserSearchInput(document.getElementById('manager'));
 			});
 		</script>
 	</section>

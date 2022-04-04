@@ -92,45 +92,43 @@
 		Language.addObject({
 			'wcf.acp.group.mmoderated.request.cancel.confirm': '{lang}wcf.acp.group.mmoderated.request.cancel.confirm{/lang}',
 			'wcf.acp.group.mmoderated.request.leave.confirm': '{lang}wcf.acp.group.mmoderated.request.leave.confirm{/lang}',
-		})
+		});
 
-		elBySel('.jsCancelButton').addEventListener(WCF_CLICK_EVENT, function (event) {
-			var element = event.currentTarget;
+		document.querySelector('.jsCancelButton').addEventListener('click', (event) => {
 			UiConfirmation.show({
-				confirm: function () {
+				confirm: () => {
 					Ajax.apiOnce({
 						data: {
 							actionName: 'cancel',
 							className: 'wcf\\data\\user\\group\\MModeratedUserGroupAction',
-							objectIDs: [ elData(element, 'group-id') ],
+							objectIDs: [ event.currentTarget.dataset.groupId ],
 							parameters: {
-								requestID: elData(element, 'request-id')
-							}
+								requestID: event.currentTarget.dataset.requestId,
+							},
 						},
 						success: function() {
 							window.location.reload();
 						}
 					})
 				},
-				message: Language.get('wcf.acp.group.mmoderated.request.cancel.confirm')
+				message: Language.get('wcf.acp.group.mmoderated.request.cancel.confirm'),
 			});
 		});
-		elBySel('.jsLeaveButton').addEventListener(WCF_CLICK_EVENT, function (event) {
-			var element = event.currentTarget;
+		document.querySelector('.jsLeaveButton').addEventListener('click', (event) => {
 			UiConfirmation.show({
-				confirm: function () {
+				confirm: () => {
 					Ajax.apiOnce({
 						data: {
 							actionName: 'leave',
 							className: 'wcf\\data\\user\\group\\MModeratedUserGroupAction',
-							objectIDs: [ elData(element, 'group-id') ]
+							objectIDs: [ event.currentTarget.dataset.groupId ],
 						},
 						success: function() {
 							window.location.reload();
-						}
+						},
 					})
 				},
-				message: Language.get('wcf.acp.group.mmoderated.leave.confirm')
+				message: Language.get('wcf.acp.group.mmoderated.leave.confirm'),
 			});
 		});
 	})

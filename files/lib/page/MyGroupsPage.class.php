@@ -26,12 +26,12 @@ class MyGroupsPage extends UserGroupListPage {
 	/**
 	 * @var UserProfile[]
 	 */
-	protected $managers = [];
+	protected array $managers = [];
 	
 	/**
 	 * @var UserGroupRequest[]
 	 */
-	protected $requests = [];
+	protected array $requests = [];
 	
 	/**
 	 * @inheritDoc
@@ -48,7 +48,7 @@ class MyGroupsPage extends UserGroupListPage {
 	public function readData() {
 		parent::readData();
 		
-		if (!count($this->objectList)) {
+		if (!\count($this->objectList)) {
 			throw new PermissionDeniedException();
 		}
 		
@@ -61,6 +61,7 @@ class MyGroupsPage extends UserGroupListPage {
 		}
 		
 		$requestList = new UserGroupRequestList();
+		$requestList->getConditionBuilder()->add('userID = ?', [WCF::getUser()->userID]);
 		$requestList->readObjects();
 		foreach ($requestList as $request) {
 			$this->requests[$request->groupID] = $request;
@@ -79,7 +80,7 @@ class MyGroupsPage extends UserGroupListPage {
 		
 		WCF::getTPL()->assign([
 			'managers' => $this->managers,
-			'requests' => $this->requests
+			'requests' => $this->requests,
 		]);
 	}
 	

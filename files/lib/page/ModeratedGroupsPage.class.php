@@ -25,7 +25,7 @@ class ModeratedGroupsPage extends UserGroupListPage {
 	/**
 	 * @var UserProfile[]
 	 */
-	protected $managers = [];
+	protected array $managers = [];
 	
 	/**
 	 * @inheritDoc
@@ -44,7 +44,7 @@ class ModeratedGroupsPage extends UserGroupListPage {
 			UserGroup::EVERYONE,
 			UserGroup::GUESTS,
 			UserGroup::USERS,
-			UserGroup::OTHER
+			UserGroup::OTHER,
 		]]);
 		$this->objectList->getConditionBuilder()->add('user_group.groupID IN (SELECT manager.groupID FROM wcf'.WCF_N.'_user_group_manager manager WHERE manager.userID = ?)', [WCF::getUser()->userID]);
 	}
@@ -55,7 +55,7 @@ class ModeratedGroupsPage extends UserGroupListPage {
 	public function readData() {
 		parent::readData();
 		
-		if (!count($this->objectList)) {
+		if (!\count($this->objectList)) {
 			throw new PermissionDeniedException();
 		}
 		
@@ -79,7 +79,7 @@ class ModeratedGroupsPage extends UserGroupListPage {
 		parent::assignVariables();
 		
 		WCF::getTPL()->assign([
-			'managers' => $this->managers
+			'managers' => $this->managers,
 		]);
 	}
 	

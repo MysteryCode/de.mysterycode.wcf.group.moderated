@@ -35,9 +35,9 @@ class GroupRequestListPage extends MultipleLinkPage {
 	public $sortOrder = 'DESC';
 	
 	/**
-	 * @var UserGroup
+	 * @var UserGroup|null
 	 */
-	protected $group;
+	protected ?UserGroup $group = null;
 	
 	/**
 	 * @inheritDoc
@@ -45,8 +45,10 @@ class GroupRequestListPage extends MultipleLinkPage {
 	public function readParameters() {
 		parent::readParameters();
 		
-		if (isset($_REQUEST['id'])) $this->group = new UserGroup(intval($_REQUEST['id']));
-		if ($this->group === null || !$this->group->groupID) {
+		if (isset($_REQUEST['id'])) {
+			$this->group = new UserGroup((int) $_REQUEST['id']);
+		}
+		if ($this->group === null || !$this->group->getObjectID()) {
 			throw new IllegalLinkException();
 		}
 	}
@@ -57,10 +59,14 @@ class GroupRequestListPage extends MultipleLinkPage {
 	public function checkPermissions() {
 		parent::checkPermissions();
 		
-		$statement = WCF::getDB()->prepareStatement("SELECT userID FROM wcf" . WCF_N . "_user_group_manager WHERE groupID = ?");
+		$statement = WCF::getDB()->prepare('
+			SELECT	userID
+			FROM	wcf1_user_group_manager
+			WHERE	groupID = ?
+		');
 		$statement->execute([$this->group->groupID]);
 		$managerIDs = $statement->fetchList('userID');
-		if (!in_array(WCF::getUser()->userID, $managerIDs)) {
+		if (!\in_array(WCF::getUser()->userID, $managerIDs)) {
 			throw new PermissionDeniedException();
 		}
 	}
@@ -71,7 +77,7 @@ class GroupRequestListPage extends MultipleLinkPage {
 	protected function initObjectList() {
 		parent::initObjectList();
 		
-		$this->objectList->getConditionBuilder()->add('groupID = ?', [$this->group->groupID]);
+		$this->objectList->getConditionBuilder()->add('groupID = ?', [$this->group->getObjectID()]);
 	}
 	
 	/**
@@ -92,7 +98,7 @@ class GroupRequestListPage extends MultipleLinkPage {
 		parent::assignVariables();
 		
 		WCF::getTPL()->assign([
-			'group' => $this->group
+			'group' => $this->group,
 		]);
 	}
 	

@@ -4,7 +4,6 @@ namespace wcf\data\user\group\request;
 
 use wcf\data\AbstractDatabaseObjectAction;
 use wcf\data\user\group\MModeratedUserGroup;
-use wcf\data\user\group\UserGroup;
 use wcf\data\user\UserAction;
 use wcf\system\cache\builder\UserGroupManagerCacheBuilder;
 use wcf\system\cache\runtime\UserRuntimeCache;
@@ -26,9 +25,10 @@ class UserGroupRequestAction extends AbstractDatabaseObjectAction {
 		if (isset($this->parameters['message_htmlInputProcessor'])) {
 			$this->parameters['data']['message'] = $this->parameters['message_htmlInputProcessor']->getHtml();
 		}
+		if (!empty($this->parameters['reply_htmlInputProcessor'])) {
+			$this->parameters['data']['reply'] = $this->parameters['reply_htmlInputProcessor']->getHtml();
+		}
 		
-		if (!isset($this->parameters['data']['userID'])) $this->parameters['data']['userID'] = WCF::getUser()->userID;
-		if (!isset($this->parameters['data']['username'])) $this->parameters['data']['username'] = WCF::getUser()->username;
 		if (!isset($this->parameters['data']['time'])) $this->parameters['data']['time'] = TIME_NOW;
 		if (!isset($this->parameters['data']['status'])) $this->parameters['data']['status'] = 'pending';
 		
@@ -48,6 +48,15 @@ class UserGroupRequestAction extends AbstractDatabaseObjectAction {
 				$objectEditor->update(['messageHasEmbeddedObjects' => 1]);
 			}
 		}
+		if (!empty($this->parameters['reply_htmlInputProcessor'])) {
+			/** @noinspection PhpUndefinedMethodInspection */
+			foreach ($this->getObjects() as $objectEditor) {
+				$this->parameters['reply_htmlInputProcessor']->setObjectID($object->getObjectID());
+				if (MessageEmbeddedObjectManager::getInstance()->registerObjects($this->parameters['reply_htmlInputProcessor'])) {
+					$objectEditor->update(['replyHasEmbeddedObjects' => 1]);
+				}
+			}
+		}
 		
 		return $object;
 	}
@@ -62,8 +71,6 @@ class UserGroupRequestAction extends AbstractDatabaseObjectAction {
 		if (!empty($this->parameters['reply_htmlInputProcessor'])) {
 			$this->parameters['data']['reply'] = $this->parameters['reply_htmlInputProcessor']->getHtml();
 		}
-		
-		if (!isset($this->parameters['data']['changeTime'])) $this->parameters['data']['changeTime'] = TIME_NOW;
 		
 		if (isset($this->parameters['removeQuoteIDs']) && !empty($this->parameters['removeQuoteIDs'])) {
 			MessageQuoteManager::getInstance()->markQuotesForRemoval($this->parameters['removeQuoteIDs']);
@@ -92,28 +99,36 @@ class UserGroupRequestAction extends AbstractDatabaseObjectAction {
 		}
 	}
 	
-	protected function validateStatusChange() {
+	/**
+	 * @throws PermissionDeniedException
+	 */
+	protected function validateStatusChange() : void {
 		$request = $this->getSingleObject();
-		$group = new UserGroup($request->groupID);
+		$group = $request->getGroup();
 		
 		$cache = UserGroupManagerCacheBuilder::getInstance()->getData();
-		if ($group === null || !$group->groupID) {
+		if ($group === null || !$group->getObjectID()) {
 			throw new PermissionDeniedException();
 		}
 		else if ($group->isAdminGroup()) {
 			throw new PermissionDeniedException();
-		} else if (!in_array($group->groupType, [MModeratedUserGroup::MODERATED, MModeratedUserGroup::CLOSEDMODERATED, MModeratedUserGroup::OPEN])) {
+		}
+		else if (!\in_array($group->groupType, [MModeratedUserGroup::MODERATED, MModeratedUserGroup::CLOSEDMODERATED, MModeratedUserGroup::OPEN])) {
 			throw new PermissionDeniedException();
-		} else if (!isset($cache[$group->groupID]) || !in_array(WCF::getUser()->userID, $cache[$group->groupID])) {
+		}
+		else if (!isset($cache[$group->getObjectID()]) || !\in_array(WCF::getUser()->userID, $cache[$group->getObjectID()])) {
 			throw new PermissionDeniedException();
 		}
 	}
 	
-	public function validateAccept() {
+	/**
+	 * @throws PermissionDeniedException
+	 */
+	public function validateAccept() : void {
 		$this->validateStatusChange();
 	}
 	
-	public function accept() {
+	public function accept() : void {
 		$this->parameters['data']['status'] = 'accepted';
 		$this->update();
 		
@@ -121,37 +136,47 @@ class UserGroupRequestAction extends AbstractDatabaseObjectAction {
 		(new UserAction([$user], 'addToGroups', [
 			'groups' => [$this->getSingleObject()->groupID,
 			'deleteOldGroups' => false,
-			'addDefaultGroups' => false
+			'addDefaultGroups' => false,
 		]]))->executeAction();
 	}
 	
-	public function validateReject() {
+	/**
+	 * @throws PermissionDeniedException
+	 */
+	public function validateReject() : void {
 		$this->validateStatusChange();
 	}
 	
-	public function reject() {
+	public function reject() : void {
 		$this->parameters['data']['status'] = 'rejected';
 		$this->update();
 		
 		$user = UserRuntimeCache::getInstance()->getObject($this->getSingleObject()->userID);
 		$groupID = $this->getSingleObject()->groupID;
-		if (in_array($groupID, $user->getGroupIDs())) {
-			(new UserAction([$user], 'removeFromGroups', ['groups' => [$groupID]]))->executeAction();
+		if (\in_array($groupID, $user->getGroupIDs())) {
+			(new UserAction([$user], 'removeFromGroups', [
+				'groups' => [$groupID],
+			]))->executeAction();
 		}
 	}
 	
-	public function validateEnqueue() {
+	/**
+	 * @throws PermissionDeniedException
+	 */
+	public function validateEnqueue() : void {
 		$this->validateStatusChange();
 	}
 	
-	public function enqueue() {
+	public function enqueue() : void {
 		$this->parameters['data']['status'] = 'pending';
 		$this->update();
 		
 		$user = UserRuntimeCache::getInstance()->getObject($this->getSingleObject()->userID);
 		$groupID = $this->getSingleObject()->groupID;
-		if (in_array($groupID, $user->getGroupIDs())) {
-			(new UserAction([$user], 'removeFromGroups', ['groups' => [$groupID]]))->executeAction();
+		if (\in_array($groupID, $user->getGroupIDs())) {
+			(new UserAction([$user], 'removeFromGroups', [
+				'groups' => [$groupID],
+			]))->executeAction();
 		}
 	}
 }

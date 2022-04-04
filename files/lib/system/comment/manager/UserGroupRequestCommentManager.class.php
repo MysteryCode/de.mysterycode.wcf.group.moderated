@@ -6,6 +6,7 @@ use wcf\data\user\group\MModeratedUserGroup;
 use wcf\data\user\group\request\UserGroupRequest;
 use wcf\data\user\group\request\UserGroupRequestEditor;
 use wcf\data\user\group\UserGroup;
+use wcf\form\GroupRequestEditForm;
 use wcf\system\cache\builder\UserGroupManagerCacheBuilder;
 use wcf\system\request\LinkHandler;
 use wcf\system\WCF;
@@ -44,21 +45,23 @@ class UserGroupRequestCommentManager extends AbstractCommentManager {
 	 */
 	public function isAccessible($objectID, $validateWritePermission = false) {
 		$request = new UserGroupRequest($objectID);
-		if ($request === null || !$request->requestID) {
+		if (!$request->requestID) {
 			return false;
 		}
 		
-		$group = new UserGroup($request->groupID);
+		$group = $request->getGroup();
 		
 		$cache = UserGroupManagerCacheBuilder::getInstance()->getData();
-		if ($group === null || !$group->groupID) {
+		if ($group === null || !$group->getObjectID()) {
 			return false;
 		}
 		else if ($group->isAdminGroup()) {
 			return false;
-		} else if (!in_array($group->groupType, [MModeratedUserGroup::MODERATED, MModeratedUserGroup::CLOSEDMODERATED, MModeratedUserGroup::OPEN])) {
+		}
+		else if (!in_array($group->groupType, [MModeratedUserGroup::MODERATED, MModeratedUserGroup::CLOSEDMODERATED, MModeratedUserGroup::OPEN])) {
 			return false;
-		} else if (!isset($cache[$group->groupID]) || !in_array(WCF::getUser()->userID, $cache[$group->groupID])) {
+		}
+		else if (!isset($cache[$group->groupID]) || !\in_array(WCF::getUser()->userID, $cache[$group->groupID])) {
 			return false;
 		}
 		
@@ -69,8 +72,8 @@ class UserGroupRequestCommentManager extends AbstractCommentManager {
 	 * @inheritDoc
 	 */
 	public function getLink($objectTypeID, $objectID) {
-		return LinkHandler::getInstance()->getLink('GroupRequestEdit', [
-			'id' => $objectID
+		return LinkHandler::getInstance()->getControllerLink(GroupRequestEditForm::class, [
+			'id' => $objectID,
 		], '#comments');
 	}
 	
@@ -86,7 +89,7 @@ class UserGroupRequestCommentManager extends AbstractCommentManager {
 	 */
 	public function updateCounter($objectID, $value) {
 		(new UserGroupRequestEditor(new UserGroupRequest($objectID)))->updateCounters([
-			'comments' => $value
+			'comments' => $value,
 		]);
 	}
 	

@@ -6,20 +6,29 @@ use wcf\system\user\storage\UserStorageHandler;
 use wcf\system\WCF;
 
 class MModeratedUserGroupAction extends UserGroupAction {
-	public function overrideLeaders() {
+	public function overrideLeaders() : void {
 		$group = $this->getSingleObject();
 		$this->readIntegerArray('userIDs', true);
 		$userIDs = $this->parameters['userIDs'];
 		
 		// TODO compatibility
-		$delete = WCF::getDB()->prepareStatement("DELETE FROM wcf" . WCF_N . "_user_group_manager WHERE groupID = ?");
+		$delete = WCF::getDB()->prepare('
+			DELETE FROM     wcf1_user_group_manager
+			WHERE		groupID = ?
+		');
 		$delete->execute([$group->groupID]);
 		
 		if (!empty($userIDs)) {
 			// TODO compatibility
-			$insert = WCF::getDB()->prepareStatement("INSERT INTO wcf" . WCF_N . "_user_group_manager (userID, groupID) VALUES (?, ?)");
+			$insert = WCF::getDB()->prepare('
+				INSERT INTO     wcf1_user_group_manager
+				        	(userID, groupID)
+		                VALUES		(?, ?)
+	                ');
 			WCF::getDB()->beginTransaction();
-			foreach ($userIDs as $userID) $insert->execute([$userID, $group->groupID]);
+			foreach ($userIDs as $userID) {
+				$insert->execute([$userID, $group->groupID]);
+			}
 			WCF::getDB()->commitTransaction();
 		}
 		
@@ -28,15 +37,21 @@ class MModeratedUserGroupAction extends UserGroupAction {
 		UserGroupEditor::resetCache();
 	}
 	
-	public function addLeaders() {
+	public function addLeaders() : void {
 		$group = $this->getSingleObject();
 		$this->readIntegerArray('userIDs');
 		$userIDs = $this->parameters['userIDs'];
 		
 		// TODO compatibility
-		$insert = WCF::getDB()->prepareStatement("INSERT IGNORE INTO wcf" . WCF_N . "_user_group_manager (userID, groupID) VALUES (?, ?)");
+		$insert = WCF::getDB()->prepare('
+			INSERT IGNORE INTO	wcf1_user_group_manager
+						(userID, groupID)
+			VALUES			(?, ?)
+		');
 		WCF::getDB()->beginTransaction();
-		foreach ($userIDs as $userID) $insert->execute([$userID, $group->groupID]);
+		foreach ($userIDs as $userID) {
+			$insert->execute([$userID, $group->groupID]);
+		}
 		WCF::getDB()->commitTransaction();
 		
 		UserStorageHandler::getInstance()->resetAll('isGroupManager');
@@ -44,27 +59,27 @@ class MModeratedUserGroupAction extends UserGroupAction {
 		UserGroupEditor::resetCache();
 	}
 	
-	public function validateJoin() {
+	public function validateJoin() : void {
 		$this->getSingleObject();
 	}
 	
-	public function join() {
+	public function join() : void {
 	
 	}
 	
-	public function validateLeave() {
+	public function validateLeave() : void {
 		$this->getSingleObject();
 	}
 	
-	public function leave() {
+	public function leave() : void {
 	
 	}
 	
-	public function validateCancel() {
+	public function validateCancel() : void {
 		$this->getSingleObject();
 	}
 	
-	public function cancel() {
+	public function cancel() : void {
 	
 	}
 }
